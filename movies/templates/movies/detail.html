@@ -4,14 +4,22 @@
 {% block title %}{{ movie.title }}{% endblock %}
 
 {% block content %}
-<h1>Movies</h1>
-<p>{{ movie.original_title }}</p>
-<p>{{ movie.release_date }}</p>
+<h1>{{ movie.title }}</h1>
+<h3>{{ movie.original_title }}</h3>
+{% for g in movie.genres.all %}
+{{ g.name }},
+{% endfor %}
+<p class="text-right">{{ movie.release_date }}</p>
 <p>{{ movie.overview }}</p>
 
-
-<i class="fas fa-heart fa-lg like-buttons" style="color:black" data-id="{{ movie.pk }}"></i>
-<span id="like-count-{{ movie.pk }}">{{ movie.like_movies.all|length }}</span> 명이 이 글을 좋아합니다.
+{% if request.user.is_authenticated %}
+  {% if request.user in movie.like_user.all %}
+  <i class="fas fa-heart fa-lg like-buttons" style="color:crimson" data-id="{{ movie.pk }}"></i>
+  {% else %}
+  <i class="fas fa-heart fa-lg like-buttons" style="color:black" data-id="{{ movie.pk }}"></i>
+  {% endif %}
+{% endif %}
+<span id="like-count-{{ movie.pk }}">{{ movie.like_user.all|length }}</span> 명이 이 글을 좋아합니다.
 
 
 <script>
@@ -19,12 +27,12 @@
 
   likeButtonList.forEach(likeButton => {
     likeButton.addEventListener('click', e => {
-      const articleID = e.target.dataset.id
-      
+      const movidID = e.target.dataset.id
+
       {% if user.is_authenticated %}
-      axios.get(`/movies/${articleID}/movie_like/`)
+      axios.get(`/movies/${movidID}/movie_like/`)
       .then(res => {
-          document.querySelector(`#like-count-${articleID}`).innerText = res.data.count
+          document.querySelector(`#like-count-${movidID}`).innerText = res.data.count
           if (res.data.liked) {
             e.target.style.color = 'crimson'
           } else {

@@ -5,7 +5,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.core.paginator import Paginator
-from random import choice
+import random
+
 
 from .models import Movie
 from .forms import MovieForm
@@ -13,15 +14,16 @@ from .forms import MovieForm
 # Create your views here.
 def index(request):
     movies = Movie.objects.order_by('-release_date')
-    rec_movies = choice(movies)
     paginator = Paginator(movies, 12)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
+    ranmv = random.choices(movies, k=10)
+
     context = {
         'movies':movies,
         'page_obj': page_obj,
-        'rec_movies': rec_movies,
+        'ranmv': ranmv,
     }
 
     return render(request, 'movies/index.html', context)
