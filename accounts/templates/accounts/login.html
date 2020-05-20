@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load bootstrap4 %}
+{% load socialaccount %}
+
 
 {% block title %}Login{% endblock %}
 
@@ -10,5 +12,8 @@
     {% csrf_token %}
     {% bootstrap_form form %}
     <button class="btn btn-secondary">로그인</button>
+    <a href="{% provider_login_url 'google' %}" class="btn btn-primary">GOOGLE LOGIN</a>
+
+
 </form>
 {% endblock %}

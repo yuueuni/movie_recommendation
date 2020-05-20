@@ -5,6 +5,9 @@
 
 {% block content %}
 <h1>Movies</h1>
+<p>{{ movie.original_title }}</p>
+<p>{{ movie.release_date }}</p>
+<p>{{ movie.overview }}</p>
 
 
 <i class="fas fa-heart fa-lg likeButtons" style="color:black" data-id="{{ movie.pk }}"></i>
@@ -17,6 +20,7 @@
       likeButtonList.forEach(likeButton => {
         likeButton.addEventListener('click', e=> {
           const MovieID = e.target.dataset.id
+            {% if user.is_authenticated %}
             axios.get(`/movies/${MovieID}/movie_like/`)
             .then(res => {
               document.querySelector(`#like-count-${movieID}`).innerText = res.data.count
@@ -26,6 +30,7 @@
                 e.target.style.color = 'black'
               }
             })
+            {% endif %}
         })
       })
 
