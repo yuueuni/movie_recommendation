@@ -55,14 +55,14 @@ def movie_like(request, movie_pk):
     user = request.user
     movie = get_object_or_404(Movie, pk=movie_pk)
 
-    if movie.like_users.filter(pk=user.pk).exists():
-        movie.like_users.remove(user)
+    if movie.like_user.filter(pk=user.pk).exists():
+        movie.like_user.remove(user)
         liked = False
     else:
-        movie.like_users.add(user)
+        movie.like_user.add(user)
         liked = True
     context = {
         'liked': liked,
-        'count': movie.like_users.count()
+        'count': movie.like_user.count()
     }
     return JsonResponse(context)
