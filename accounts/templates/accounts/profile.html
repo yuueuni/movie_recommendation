@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<h1>{{ user.username }}</h1>
+<hr>
+<p>팔로워 : {{ user.followers.count }}명</p>
+<p>팔로잉 : {{ user.followings.count }}명</p>
+{% if request.user.is_authenticated %}
+    {% if request.user == user %}
+        <a href="{% url 'accounts:update' %}"><button class="btn btn-secondary">회원 수정</button></a>
+        <form action="{% url 'accounts:delete' %}" method="POST">
+            {% csrf_token %}
+            <button class="btn btn-danger">회원 탈퇴</button>
+        </form>
+    {% else %}
+        {% if request.user in user.followers.all %}
+            <a href="{% url 'accounts:follow' user.pk %}"><i class="fas fa-user-check fa-2x"></i></a>
+        {% else %}
+            <a href="{% url 'accounts:follow' user.pk %}"><i class="fas fa-user-plus fa-2x"></i></a>
+        {% endif %}
+    {% endif %}
+{% endif %}
+<hr>
+<h3>{{ user.username }}님이 작성한 리뷰 | {{ user.reviews.count }}개</h3>
+{% for review in user.reveiws.all %}
+    <p>제목 : {{ review.title }} ({{ review.comments.count }}</p>
+    <p>영화 제목 : {{ review.movie_title }}</p>
+    <p>좋아요 : {{ review.like_reviews.count }}명</p>
+    <hr>
+{% endfor %}
+{% endblock %}
