@@ -1,1 +1,1 @@
-web: gunicorn django_pjt2.wsgi --log-file -
+web: gunicorn django_pjt5.wsgi --log-file -
