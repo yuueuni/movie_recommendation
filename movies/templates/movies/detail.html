@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block title %}{{ movie.title }}{% endblock %}
+
+{% block content %}
+<h1>Movies</h1>
+
+
+<i class="fas fa-heart fa-lg likeButtons" style="color:black" data-id="{{ movie.pk }}"></i>
+<span id="like-count-{{ movie.pk }}">{{ movie.like_movies.all|length }}</span> 명이 이 글을 좋아합니다.
+
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      const likeButtonList = document.querySelectorAll('.likeButtons')
+      likeButtonList.forEach(likeButton => {
+        likeButton.addEventListener('click', e=> {
+          const MovieID = e.target.dataset.id
+            axios.get(`/movies/${MovieID}/movie_like/`)
+            .then(res => {
+              document.querySelector(`#like-count-${movieID}`).innerText = res.data.count
+              if (res.data.liked) {
+                e.target.style.color = 'crimson'
+              } else {
+                e.target.style.color = 'black'
+              }
+            })
+        })
+      })
+
+    </script>
+
+{% endblock %}

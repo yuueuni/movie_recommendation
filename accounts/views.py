@@ -11,12 +11,12 @@ from .forms import CustomUserChangeForm, CustomUserCreationForm
 # Create your views here.
 def login(request):
     if request.user.is_authenticated:
-        return redirect('community:index')
+        return redirect('movies:index')
     if request.method == 'POST':
         form = AuthenticationForm(request, request.POST)
         if form.is_valid():
             auth_login(request, form.get_user())
-            return redirect(request.GET.get('next') or 'community:index')
+            return redirect(request.GET.get('next') or 'movies:index')
     else:
         form = AuthenticationForm()
     context = {
@@ -27,17 +27,17 @@ def login(request):
 @login_required
 def logout(request):
     auth_logout(request)
-    return redirect('community:index')
+    return redirect('movies:index')
 
 def signup(request):
     if request.user.is_authenticated:
-        return redirect('community:index')
+        return redirect('movies:index')
 
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('community:index')
+            return redirect('movies:index')
     else:
         form = CustomUserCreationForm()
     context = {
@@ -66,14 +66,14 @@ def follow(request, user_pk):
 @login_required
 def delete(request):
     request.user.delete()
-    return redirect('community:index')
+    return redirect('movies:index')
 
 def update(request):
     if request.method == 'POST':
         form = CustomUserChangeForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect('community:index')
+            return redirect('movies:index')
     else:
         form = CustomUserChangeForm(instance=request.user)
     context={
