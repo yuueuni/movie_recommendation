@@ -1,0 +1,5 @@
+beautifulsoup4==4.9.1
+Django==2.1.15
+django-bootstrap4==1.1.1
+pytz==2020.1
+soupsieve==2.0.1
